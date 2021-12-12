@@ -1,18 +1,16 @@
-RESTAT
+restat
 ------
 
-.. toctree::
- :hidden:
-
- self
-
-**restat** is variant of parallel manipulator.
-
-`restat <https://en.wikipedia.org/wiki/Delta_robot>`_ is developed in C code: **100%**.
+**restat** is controlled relay-interface station for automatization.
 
 The README is used to introduce the tool and provide instructions on
 how to install the tool, any machine dependencies it may have and any
 other information that should be provided before the tool is installed.
+
+.. toctree::
+   :hidden:
+
+   self
 
 |GitHub issues| |Documentation Status| |GitHub contributors|
 
@@ -25,26 +23,26 @@ other information that should be provided before the tool is installed.
 .. |Documentation Status| image:: https://readthedocs.org/projects/restat/badge/?version=latest
    :target: https://restat.readthedocs.io/projects/restat/en/latest/?badge=latest
 
-INSTALLATION
+Installation
 -------------
 
 Navigate to release `page`_ download and extract release archive.
 
 .. _page: https://github.com/electux/restat/releases
 
-To install **restat** type the following:
+To install **restat** type the following
 
 .. code-block:: bash
 
    in progress
 
-DEPENDENCIES
+Dependencies
 -------------
 
-**restat** requires next modules and libraries:
+**restat** requires next modules and libraries
     in progress
 
-PROJECT STRUCTURE
+Project structure
 ------------------
 
 **restat** is based on POP.
@@ -53,7 +51,7 @@ PROJECT STRUCTURE
 
    in progress
 
-COPYRIGHT AND LICENCE
+Copyright and licence
 ----------------------
 
 |License: GPL v3| |License: Apache 2.0|
