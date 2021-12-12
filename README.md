@@ -24,6 +24,8 @@ other information that should be provided before the tool is installed.
 
 ### Installation
 
+![Debian Linux OS](https://raw.githubusercontent.com/electux/restat/dev/docs/debtux.png)
+
 Navigate to release [page](https://github.com/electux/restat/releases) download and extract release archive.
 
 To install **restat** follow next instructions
