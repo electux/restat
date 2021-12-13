@@ -11,7 +11,8 @@ other information that should be provided before the tool is installed.
 [![GitHub issues open](https://img.shields.io/github/issues/electux/restat.svg)](https://github.com/electux/restat/issues)
  [![GitHub contributors](https://img.shields.io/github/contributors/electux/restat.svg)](https://github.com/electux/restat/graphs/contributors)
 
-<!-- START doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Installation](#installation)
@@ -19,8 +20,9 @@ other information that should be provided before the tool is installed.
 - [Dependencies](#dependencies)
 - [Project structure](#project-structure)
 - [Docs](#docs)
-- [Copyright and Licence](#copyright-and-licence)
-<!-- END doctoc -->
+- [Copyright and licence](#copyright-and-licence)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### Installation
 

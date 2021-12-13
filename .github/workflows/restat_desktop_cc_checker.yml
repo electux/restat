@@ -1,0 +1,27 @@
+name: restat-desktop C++ CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install GTK--
+      id: install_gtkmm
+      run: |
+        sudo apt-get update
+        sudo apt-get install jq
+        sudo apt-get install libgtkmm-3.0-dev
+    - name: make all
+      id: gnu_make_all
+      run: |
+        cd sw/restat-desktop/build
+        make all
+    - name: make clean
+      id: gnu_make_clean
+      run: |
+        cd sw/restat-desktop/build
+        make clean
