@@ -11,7 +11,8 @@ other information that should be provided before the tool is installed.
 [![GitHub issues open](https://img.shields.io/github/issues/electux/restat.svg)](https://github.com/electux/restat/issues)
  [![GitHub contributors](https://img.shields.io/github/contributors/electux/restat.svg)](https://github.com/electux/restat/graphs/contributors)
 
-<!-- START doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Installation](#installation)
@@ -19,8 +20,9 @@ other information that should be provided before the tool is installed.
 - [Dependencies](#dependencies)
 - [Project structure](#project-structure)
 - [Docs](#docs)
-- [Copyright and Licence](#copyright-and-licence)
-<!-- END doctoc -->
+- [Copyright and licence](#copyright-and-licence)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### Installation
 
@@ -67,3 +69,10 @@ More documentation and info at
 
 Copyright (C) 2020 by [electux.github.io/restat](https://electux.github.io/restat)
 
+Lets help and support Raspberry PI && GNOME.
+
+<a href="https://www.raspberrypi.org/donate/">
+<img src="https://raw.githubusercontent.com/electux/restat/master/docs/RPi.png" alt="RPi" width="350" height="98">
+</a> <a href="https://www.gnome.org/support-gnome/donate/">
+<img src="https://raw.githubusercontent.com/electux/restat/master/docs/GNOME.png" alt="GNOME" width="327" height="115">
+</a>
