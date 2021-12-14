@@ -2,8 +2,12 @@ name: restat-desktop C++ CI
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'sw/restat-desktop/**'
   pull_request:
     branches: [ master ]
+    paths:
+      - 'sw/restat-desktop/**'
 jobs:
   build:
     runs-on: ubuntu-latest
