@@ -69,3 +69,10 @@ More documentation and info at
 
 Copyright (C) 2020 by [electux.github.io/restat](https://electux.github.io/restat)
 
+Lets help and support Raspberry PI && GNOME.
+
+<a href="https://www.raspberrypi.org/donate/">
+<img src="https://raw.githubusercontent.com/electux/restat/master/docs/RPi.png" alt="RPi" width="350" height="98">
+</a> <a href="https://www.gnome.org/support-gnome/donate/">
+<img src="https://raw.githubusercontent.com/electux/restat/master/docs/GNOME.png" alt="GNOME" width="327" height="115">
+</a>
