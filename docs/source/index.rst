@@ -1,5 +1,5 @@
 restat
-------
+-------
 
 **restat** is controlled relay-interface station for automatization.
 
@@ -62,5 +62,5 @@ Copyright and licence
 .. |License: Apache 2.0| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
    :target: https://opensource.org/licenses/Apache-2.0
 
-Copyright (C) 2020 by `electux.github.io/restat <https://electux.github.io/restat>`_
+Copyright (C) 2020 - 2024 by `electux.github.io/restat <https://electux.github.io/restat>`_
 
