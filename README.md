@@ -1,6 +1,6 @@
-<img align="right" src="https://raw.githubusercontent.com/electux/restat/dev/docs/restat_logo.png" width="25%">
-
 # restat
+
+<img align="right" src="https://raw.githubusercontent.com/electux/restat/dev/docs/restat_logo.png" width="25%">
 
 **restat** is controlled relay-interface station for automatization.
 
@@ -67,7 +67,7 @@ More documentation and info at
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Copyright (C) 2020 by [electux.github.io/restat](https://electux.github.io/restat)
+Copyright (C) 2020 - 2024 by [electux.github.io/restat](https://electux.github.io/restat)
 
 Lets help and support Raspberry PI && GNOME.
 
