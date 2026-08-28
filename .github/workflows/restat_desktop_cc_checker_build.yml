@@ -1,31 +1,38 @@
-name: restat-desktop C++ CI
+name: restatdesk build checker
 on:
   push:
     branches: [ master ]
     paths:
-      - 'sw/restat-desktop/**'
+      - 'sw/restatdesk/**/*.cc'
+      - 'sw/restatdesk/**/*.h'
   pull_request:
     branches: [ master ]
     paths:
-      - 'sw/restat-desktop/**'
+      - 'sw/restatdesk/**/*.cc'
+      - 'sw/restatdesk/**/*.h'
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: install GTK--
+    - name: install gtkmm
       id: install_gtkmm
       run: |
         sudo apt-get update
-        sudo apt-get install jq
-        sudo apt-get install libgtkmm-3.0-dev
+        sudo apt-get upgrade -y
+        sudo apt-get install -y pkg-config
+        sudo apt-get install -y libserial-dev
+        sudo apt-get install -y libgtkmm-3.0-dev
+        sudo apt-get install -y libgtk-4-dev
+        sudo apt-get install -y software-properties-common
+        sudo apt-get install -y libgtkmm-4.0-dev
     - name: make all
       id: gnu_make_all
       run: |
-        cd sw/restat-desktop/build
+        cd sw/restatdesk/build
         make all
     - name: make clean
       id: gnu_make_clean
       run: |
-        cd sw/restat-desktop/build
+        cd sw/restatdesk/build
         make clean

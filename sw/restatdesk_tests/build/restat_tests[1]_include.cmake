@@ -1,0 +1,5 @@
+if(EXISTS "/data/dev/raspberry/restat/github/restat/sw/restatdesk_tests/build/restat_tests[1]_tests.cmake")
+  include("/data/dev/raspberry/restat/github/restat/sw/restatdesk_tests/build/restat_tests[1]_tests.cmake")
+else()
+  add_test(restat_tests_NOT_BUILT restat_tests_NOT_BUILT)
+endif()
