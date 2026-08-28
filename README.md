@@ -20,10 +20,20 @@ other information that should be provided before the tool is installed.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [System Components](#system-components)
+  - [1. restat Firmware (`restat_base`)](#1-restat-firmware-restat_base)
+  - [2. restatdesk GUI Application (`restatdesk`)](#2-restatdesk-gui-application-restatdesk)
+- [Command Interface (restat Protocol)](#command-interface-restat-protocol)
 - [Installation](#installation)
+  - [1. Firmware (`restat_base`)](#1-firmware-restat_base)
+  - [2. Desktop Application (`restatdesk`)](#2-desktop-application-restatdesk)
 - [Usage](#usage)
+  - [1. GUI Panel](#1-gui-panel)
+  - [2. Test Commands](#2-test-commands)
 - [Dependencies](#dependencies)
-- [Project structure](#project-structure)
+  - [Firmware (`restat_base`)](#firmware-restat_base)
+  - [Desktop GUI (`restatdesk`)](#desktop-gui-restatdesk)
+- [Project Structure](#project-structure)
 - [Docs](#docs)
 - [Copyright and licence](#copyright-and-licence)
 
