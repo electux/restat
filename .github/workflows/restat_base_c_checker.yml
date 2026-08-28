@@ -10,6 +10,7 @@ on:
     paths:
       - 'sw/restat_base/src/**/*.c'
       - 'sw/restat_base/src/**/*.h'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
