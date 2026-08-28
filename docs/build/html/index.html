@@ -40,34 +40,195 @@ how to install the tool, any machine dependencies it may have and any
 other information that should be provided before the tool is installed.</p>
 <div class="toctree-wrapper compound">
 </div>
-<p><a class="reference external" href="https://github.com/electux/restat/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/electux/restat.svg" /></a> <a class="reference external" href="https://restat.readthedocs.io/projects/restat/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/restat/badge/?version=latest" /></a> <a class="reference external" href="https://github.com/electux/restat/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/electux/restat.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/electux/restat/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/electux/restat.svg" /></a> <a class="reference external" href="https://restat.readthedocs.io/projects/restat/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/restat/badge/?version=latest" /></a> <a class="reference external" href="https://github.com/electux/restat/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/electux/restat.svg" /></a> <a class="reference external" href="https://github.com/electux/restat/actions/workflows/restat_base_c_checker.yml"><img alt="restat_base C checker" src="https://github.com/electux/restat/actions/workflows/restat_base_c_checker.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker.yml"><img alt="restatdesk CC checker" src="https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker_build.yml"><img alt="restatdesk build checker" src="https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker_build.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/electux/restat/actions/workflows/restat_toc.yml"><img alt="restat toc" src="https://github.com/electux/restat/actions/workflows/restat_toc.yml/badge.svg" /></a></p>
+</section>
+<section id="system-components">
+<h1>System Components<a class="headerlink" href="#system-components" title="Link to this heading">¶</a></h1>
+<p><strong>restat</strong> consists of two primary components:</p>
+<section id="restat-firmware-restat-base">
+<h2>1. restat Firmware (<code class="docutils literal notranslate"><span class="pre">restat_base</span></code>)<a class="headerlink" href="#restat-firmware-restat-base" title="Link to this heading">¶</a></h2>
+<p>A low-level C firmware designed for Pico RP2040 microcontrollers to actuate, time, and persist relay outputs.</p>
+<ul class="simple">
+<li><p><strong>Role</strong>: Actuates 8 mechanical relay channels using high-precision timers and persists configurations directly to onboard Flash memory.</p></li>
+<li><p><strong>Features</strong>:
+* Multi-interface Command Dispatcher (Serial, TCP/IP, BLE).
+* Variable Execution Plan Parser: Processes complex execution strings concurrently to set states and schedules.
+* Flash-Based Plan Persistence: Automatically stores execution plans at a <code class="docutils literal notranslate"><span class="pre">1.5</span> <span class="pre">MB</span></code> flash offset (<code class="docutils literal notranslate"><span class="pre">0x180000</span></code>) and restores configurations upon reboot.
+* Precise Timing Engine: Millisecond-level accuracy for Timed modes.
+* Safety Watchdog &amp; Sound Indicators: Recovery loops coupled with active buzzer signaling.</p></li>
+</ul>
+</section>
+<section id="restatdesk-gui-application-restatdesk">
+<h2>2. restatdesk GUI Application (<code class="docutils literal notranslate"><span class="pre">restatdesk</span></code>)<a class="headerlink" href="#restatdesk-gui-application-restatdesk" title="Link to this heading">¶</a></h2>
+<p>A responsive, cross-platform C++ application built on <strong>gtkmm 4</strong> and <strong>GTK 4</strong>.</p>
+<ul class="simple">
+<li><p><strong>Role</strong>: Configures, controls, and monitors the relay station in real-time.</p></li>
+<li><p><strong>Features</strong>:</p>
+<ul>
+<li><p>Real-Time LED Indicators: High-visibility green status lights showing live channel states.</p></li>
+<li><p>Configurable Relay Modes:</p>
+<ul>
+<li><p><strong>Toggle Mode</strong>: Activates or deactivates relays on click.</p></li>
+<li><p><strong>Timer Mode</strong>: Executes timed sequences with flexible starting states (Active = ON on Start, Deactive = OFF on Start).</p></li>
+</ul>
+</li>
+<li><p>Dynamic Plan Builder: Serializes only active relay states into a single, variable-length plan command to protect relay lifespans.</p></li>
+<li><p>Sleek Green-on-Black Dark Mode: Custom CSS styles compiled directly into the binary as GResource packages.</p></li>
+<li><p>Multithreaded System Logs: Visualized console output and persistent file logging.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="command-interface-restat-protocol">
+<h1>Command Interface (restat Protocol)<a class="headerlink" href="#command-interface-restat-protocol" title="Link to this heading">¶</a></h1>
+<p>All commands sent to the <code class="docutils literal notranslate"><span class="pre">restat_base</span></code> firmware must be wrapped in start/end markers: <code class="docutils literal notranslate"><span class="pre">&lt;rs#TARGET#ACTION#PARAMS#end&gt;</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Action</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#sys#id#end&gt;</span></code></p></td>
+<td><p>Identify</p></td>
+<td><p>Returns board identification (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;rs#sys#rs:333:2023:0#end&gt;</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#sys#version#end&gt;</span></code></p></td>
+<td><p>Get Version</p></td>
+<td><p>Returns firmware version (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;rs#sys#restat</span> <span class="pre">v1.0.0#end&gt;</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#ch#X#on#end&gt;</span></code></p></td>
+<td><p>Channel ON</p></td>
+<td><p>Sets channel <code class="docutils literal notranslate"><span class="pre">X</span></code> (1-8) to ON (active) state</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#ch#X#off#end&gt;</span></code></p></td>
+<td><p>Channel OFF</p></td>
+<td><p>Sets channel <code class="docutils literal notranslate"><span class="pre">X</span></code> (1-8) to OFF (deactive) state</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#ch#X#tmr#MS#end&gt;</span></code></p></td>
+<td><p>Timed Channel</p></td>
+<td><p>Starts timer on channel <code class="docutils literal notranslate"><span class="pre">X</span></code> for <code class="docutils literal notranslate"><span class="pre">MS</span></code> milliseconds starting ON</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#all#on#end&gt;</span></code></p></td>
+<td><p>All ON</p></td>
+<td><p>Turns all channels ON concurrently</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#all#off#end&gt;</span></code></p></td>
+<td><p>All OFF</p></td>
+<td><p>Turns all channels OFF concurrently</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#all#mask#MASK#end&gt;</span></code></p></td>
+<td><p>Binary Mask</p></td>
+<td><p>Sets all 8 channels to binary state <code class="docutils literal notranslate"><span class="pre">MASK</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">10101010</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#all#plan#[plan_string]#end&gt;</span></code></p></td>
+<td><p>Execute Plan</p></td>
+<td><p>Sends a variable-length configuration plan containing relay states and saves</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#ch#X#stat#end&gt;</span></code></p></td>
+<td><p>Channel Status</p></td>
+<td><p>Returns the status string of channel <code class="docutils literal notranslate"><span class="pre">X</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#all#stat#end&gt;</span></code></p></td>
+<td><p>All Status</p></td>
+<td><p>Returns status dump for all channels</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;rs#sys#reset#end&gt;</span></code></p></td>
+<td><p>Reset</p></td>
+<td><p>Performs soft system reset using watchdog</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
-<p>Navigate to release <a class="reference external" href="https://github.com/electux/restat/releases">page</a> download and extract release archive.</p>
-<p>To install <strong>restat</strong> type the following</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">in</span><span class="w"> </span>progress
+<section id="firmware-restat-base">
+<h2>1. Firmware (<code class="docutils literal notranslate"><span class="pre">restat_base</span></code>)<a class="headerlink" href="#firmware-restat-base" title="Link to this heading">¶</a></h2>
+<p>Setup the Raspberry Pi Pico SDK on your host system, then build:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>sw/restat_base
+mkdir<span class="w"> </span>-p<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>..
+make<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
 </pre></div>
 </div>
+<p>Boot the board in BOOTSEL mode and copy the compiled <code class="docutils literal notranslate"><span class="pre">restat_base.uf2</span></code> to the Pico mass storage volume.</p>
+</section>
+<section id="desktop-application-restatdesk">
+<h2>2. Desktop Application (<code class="docutils literal notranslate"><span class="pre">restatdesk</span></code>)<a class="headerlink" href="#desktop-application-restatdesk" title="Link to this heading">¶</a></h2>
+<p>Ensure all C++23 compiler tools and GTK 4 libraries are installed, then run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>sw/restatdesk/build
+make<span class="w"> </span>all
+</pre></div>
+</div>
+<p>The executable <code class="docutils literal notranslate"><span class="pre">restatdesk</span></code> will be ready inside the <code class="docutils literal notranslate"><span class="pre">build/</span></code> directory.</p>
+</section>
+</section>
+<section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
+<section id="gui-panel">
+<h2>1. GUI Panel<a class="headerlink" href="#gui-panel" title="Link to this heading">¶</a></h2>
+<p>Launch the desktop client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./sw/restatdesk/build/restatdesk
+</pre></div>
+</div>
+<p>Configure the connection (Serial, TCP/IP, or BLE) in the Settings window, toggle active relay options in the UI, and click <strong>Execute Plan</strong> in the main window or under the <code class="docutils literal notranslate"><span class="pre">Command</span></code> menu to transmit changes.</p>
+</section>
+<section id="test-commands">
+<h2>2. Test Commands<a class="headerlink" href="#test-commands" title="Link to this heading">¶</a></h2>
+<p>Connect directly to the station via terminal console or socket connection (e.g. <code class="docutils literal notranslate"><span class="pre">minicom</span></code> or <code class="docutils literal notranslate"><span class="pre">nc</span></code>) and send raw protocol frames:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set channel 1 to ON</span>
+&lt;rs#ch#1#on#end&gt;
+</pre></div>
+</div>
+</section>
 </section>
 <section id="dependencies">
 <h1>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h1>
-<dl class="simple">
-<dt><strong>restat</strong> requires next modules and libraries</dt><dd><p>in progress</p>
-</dd>
-</dl>
+<section id="id1">
+<h2>Firmware (<code class="docutils literal notranslate"><span class="pre">restat_base</span></code>)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Raspberry Pi Pico SDK (v1.5.0+)</p></li>
+<li><p>GCC ARM Embedded Toolchain (<code class="docutils literal notranslate"><span class="pre">arm-none-eabi-gcc</span></code>)</p></li>
+<li><p>CMake &amp; GNU Make</p></li>
+</ul>
+</section>
+<section id="desktop-gui-restatdesk">
+<h2>Desktop GUI (<code class="docutils literal notranslate"><span class="pre">restatdesk</span></code>)<a class="headerlink" href="#desktop-gui-restatdesk" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>C++23 compatible compiler (GCC 13+)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gtkmm-4.0</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">libgtk-4-dev</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libserial-dev</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pkg-config</span></code></p></li>
+<li><p>GNU Make</p></li>
+</ul>
+</section>
 </section>
 <section id="project-structure">
-<h1>Project structure<a class="headerlink" href="#project-structure" title="Link to this heading">¶</a></h1>
-<p><strong>restat</strong> is based on POP.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">in</span><span class="w"> </span>progress
-</pre></div>
-</div>
+<h1>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading">¶</a></h1>
+<p>The codebase layout is structured as follows:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="file:///data/dev/raspberry/restat/github/restat/sw/restat_base">sw/restat_base/</a> - Core Pico firmware:
+* <code class="docutils literal notranslate"><span class="pre">src/command/</span></code> - Dispatcher and frame parser.
+* <code class="docutils literal notranslate"><span class="pre">src/device/</span></code> - Watchdog, buzzer, relay, and flash persistence drivers.</p></li>
+<li><p><a class="reference external" href="file:///data/dev/raspberry/restat/github/restat/sw/restat_base_tests">sw/restat_base_tests/</a> - C++ GoogleTest suite for host-based firmware logic validation.</p></li>
+<li><p><a class="reference external" href="file:///data/dev/raspberry/restat/github/restat/sw/restatdesk">sw/restatdesk/</a> - GTK 4 client:
+* <code class="docutils literal notranslate"><span class="pre">com/</span></code> - Serial, TCP, and BLE client layers.
+* <code class="docutils literal notranslate"><span class="pre">config/</span></code> - File configuration load/store manager.
+* <code class="docutils literal notranslate"><span class="pre">model/</span></code> - Relay delegates, channel states, and business logic.
+* <code class="docutils literal notranslate"><span class="pre">view/</span></code> - GUI window tabs, widgets, and GResource styled assets.</p></li>
+<li><p><a class="reference external" href="file:///data/dev/raspberry/restat/github/restat/sw/restatdesk_tests">sw/restatdesk_tests/</a> - C++ GoogleTest suite for desktop client controllers and helpers.</p></li>
+<li><p><a class="reference external" href="file:///data/dev/raspberry/restat/github/restat/docs">docs/</a> - Documentation source files.</p></li>
+</ul>
 </section>
 <section id="copyright-and-licence">
 <h1>Copyright and licence<a class="headerlink" href="#copyright-and-licence" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/Apache-2.0"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
 <p>Copyright (C) 2020 - 2024 by <a class="reference external" href="https://electux.github.io/restat">electux.github.io/restat</a></p>
+<p>Lets help and support Raspberry PI &amp;&amp; GNOME.</p>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/electux/restat/master/docs/foundations.png"><img alt="Foundations" src="https://raw.githubusercontent.com/electux/restat/master/docs/foundations.png" style="width: 192px; height: 109px;" />
+</a>
 </section>
 
 
@@ -81,9 +242,28 @@ other information that should be provided before the tool is installed.</p>
     <h3><a href="#">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">restat</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li><a class="reference internal" href="#project-structure">Project structure</a></li>
+<li><a class="reference internal" href="#system-components">System Components</a><ul>
+<li><a class="reference internal" href="#restat-firmware-restat-base">1. restat Firmware (<code class="docutils literal notranslate"><span class="pre">restat_base</span></code>)</a></li>
+<li><a class="reference internal" href="#restatdesk-gui-application-restatdesk">2. restatdesk GUI Application (<code class="docutils literal notranslate"><span class="pre">restatdesk</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#command-interface-restat-protocol">Command Interface (restat Protocol)</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#firmware-restat-base">1. Firmware (<code class="docutils literal notranslate"><span class="pre">restat_base</span></code>)</a></li>
+<li><a class="reference internal" href="#desktop-application-restatdesk">2. Desktop Application (<code class="docutils literal notranslate"><span class="pre">restatdesk</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#gui-panel">1. GUI Panel</a></li>
+<li><a class="reference internal" href="#test-commands">2. Test Commands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a><ul>
+<li><a class="reference internal" href="#id1">Firmware (<code class="docutils literal notranslate"><span class="pre">restat_base</span></code>)</a></li>
+<li><a class="reference internal" href="#desktop-gui-restatdesk">Desktop GUI (<code class="docutils literal notranslate"><span class="pre">restatdesk</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-structure">Project Structure</a></li>
 <li><a class="reference internal" href="#copyright-and-licence">Copyright and licence</a></li>
 </ul>
 

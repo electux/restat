@@ -21,11 +21,10 @@ Info
 
 import sys
 from os.path import abspath
-from typing import Any, List, Dict, Tuple
 
 __author__ = 'Vladimir Roncevic'
 __copyright__ = '(C) 2024, https://vroncevic.github.io/restat'
-__credits__: List[str] = ['Vladimir Roncevic', 'Python Software Foundation']
+__credits__: list[str] = ['Vladimir Roncevic', 'Python Software Foundation']
 __license__ = 'https://github.com/vroncevic/restat/blob/dev/LICENSE'
 __version__ = '1.0.0'
 __maintainer__ = 'Vladimir Roncevic'
@@ -39,30 +38,30 @@ project_copyright: str = '2024, https://vroncevic.github.io/restat'
 author: str = 'Vladimir Roncevic <elektron.ronca@gmail.com>'
 version: str = '1.0.0'
 release: str = 'https://github.com/vroncevic/restat/releases'
-extensions: List[str] = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', ]
-templates_path: List[str] = ['_templates']
+extensions: list[str] = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', ]
+templates_path: list[str] = ['_templates']
 source_suffix: str = '.rst'
 master_doc: str = 'index'
 language: str = 'en'
-html_static_path: List[str] = ['_static']
-exclude_patterns: List[str] = []
+html_static_path: list[str] = ['_static']
+exclude_patterns: list[str] = []
 pygments_style: str = 'sphinx'
 html_theme: str = 'classic'
-html_static_path: List[str] = ['_static']
+html_static_path: list[str] = ['_static']
 htmlhelp_basename: str = 'restatdoc'
-latex_elements: Dict[Any, Any] = {}
-latex_documents: List[Tuple[Any, ...]] = [(
+latex_elements: dict[object, object] = {}
+latex_documents: list[tuple[object, ...]] = [(
     master_doc, 'restat.tex', 'restat Documentation',
     'Vladimir Roncevic \\textless{}elektron.ronca@gmail.com\\textgreater{}',
     'manual'
 )]
-man_pages: List[Tuple[Any, ...]] = [(
+man_pages: list[tuple[object, ...]] = [(
     master_doc, 'restat', 'restat Documentation', [author], 1
 )]
-texinfo_documents: List[Tuple[Any, ...]] = [(
+texinfo_documents: list[tuple[object, ...]] = [(
     master_doc, 'restat', 'restat Documentation',
     author, 'restat', 'One line description of project.',
     'Miscellaneous'
 )]
 epub_title: str = project
-epub_exclude_files: List[str] = ['search.html']
+epub_exclude_files: list[str] = ['search.html']

@@ -1,3 +1,87 @@
+# ==========================================
+# 1. Global & Common Ignores
+# ==========================================
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Compiler & Build Artifacts (Generic)
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.d
+*.slo
+*.lo
+*.gch
+*.pch
+*.mod
+*.smod
+*.lai
+*.la
+*.exe
+*.out
+*.app
+*.lss
+core
+
+# Development Caches & Local Configurations
+.cache/
+.clangd
+.idea/
+.vs/
+*.pfx
+
+# Python generic ignores
 __pycache__/
 *.py[cod]
-*.o
+*.pyi
+.venv/
+venv/
+ENV/
+env/
+
+# CMake generic ignores
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+CPackConfig.cmake
+CPackSourceConfig.cmake
+CTestConfig.cmake
+
+
+# ==========================================
+# 2. Sub-project Ignores (Software - sw/)
+# ==========================================
+
+### sw/restat_base
+sw/restat_base/build/
+
+### sw/restatdesk
+sw/restatdesk/build/
+sw/restatdesk/resources.cc
+
+
+# ==========================================
+# 3. Sub-project Ignores (Hardware - hw/)
+# ==========================================
+
+# KiCad / CAD backups and local caches
+hw/**/*.kicad_pcb-bak
+hw/**/*.sch-bak
+hw/**/fp-info-cache
+hw/**/*-backups/

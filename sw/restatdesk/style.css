@@ -1,0 +1,87 @@
+@define-color accent_bg_color #00FF00;
+@define-color accent_color #00FF00;
+@define-color theme_selected_bg_color #00FF00;
+@define-color theme_selected_fg_color black;
+@define-color progressbar_progress_color #00FF00;
+@define-color progressbar_trough_color #222222;
+
+textview, textview text, textview.view {
+    background-color: black;
+    color: #00FF00;
+    font-family: monospace;
+}
+
+progressbar {
+    background: transparent;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+progressbar trough, 
+progressbar .trough,
+progressbar.horizontal trough,
+progressbar.horizontal .trough {
+    background: #222222;
+    background-color: #222222;
+    background-image: none;
+    box-shadow: none;
+    border: 1px solid #444444;
+}
+
+progressbar progress, 
+progressbar .progress,
+progressbar.horizontal progress,
+progressbar.horizontal .progress,
+progressbar > trough > progress {
+    background: #00FF00;
+    background-color: #00FF00;
+    background-image: none;
+    box-shadow: none;
+    border-radius: 2px;
+}
+
+checkbutton > check {
+    background-color: #222222;
+    border-color: #555555;
+    color: transparent;
+    background-image: none;
+    box-shadow: none;
+}
+
+checkbutton:checked > check {
+    background-color: #00FF00;
+    color: black;
+    border-color: #00FF00;
+    background-image: none;
+    box-shadow: none;
+}
+
+checkbutton:hover > check {
+    border-color: #00FF00;
+}
+
+togglebutton:checked {
+    background-color: #00FF00;
+    color: black;
+    border-color: #00FF00;
+    background-image: none;
+    box-shadow: none;
+}
+
+.led-lamp {
+    background-color: #222222;
+    border-radius: 7px;
+    border: 1px solid #555555;
+    min-width: 14px;
+    min-height: 14px;
+    background-image: none;
+    box-shadow: none;
+}
+
+.led-lamp.on {
+    background-color: #00FF00;
+    box-shadow: 0 0 6px #00FF00;
+    border-color: #00FF00;
+}

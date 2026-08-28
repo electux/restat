@@ -4,5 +4,16 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.exclude": {
+			"**/*.o": true,
+			"**/*.lss": true,
+			"**/core": true,
+			"**/resources.cc": true,
+			"**/build/": true,
+			"**/.built": true,
+			"**/.depend": true,
+			"**/Make.dep": true
+		}
+	}
 }

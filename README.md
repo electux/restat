@@ -10,6 +10,11 @@ other information that should be provided before the tool is installed.
 
 [![GitHub issues open](https://img.shields.io/github/issues/electux/restat.svg)](https://github.com/electux/restat/issues)
  [![GitHub contributors](https://img.shields.io/github/contributors/electux/restat.svg)](https://github.com/electux/restat/graphs/contributors)
+ [![restat_base C checker](https://github.com/electux/restat/actions/workflows/restat_base_c_checker.yml/badge.svg)](https://github.com/electux/restat/actions/workflows/restat_base_c_checker.yml)
+ [![restatdesk CC checker](https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker.yml/badge.svg)](https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker.yml)
+ [![restatdesk build checker](https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker_build.yml/badge.svg)](https://github.com/electux/restat/actions/workflows/restat_desktop_cc_checker_build.yml)
+ [![restat toc](https://github.com/electux/restat/actions/workflows/restat_toc.yml/badge.svg)](https://github.com/electux/restat/actions/workflows/restat_toc.yml)
+
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -23,38 +28,128 @@ other information that should be provided before the tool is installed.
 - [Copyright and licence](#copyright-and-licence)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+### System Components
+
+**restat** consists of two primary components:
+
+#### 1. restat Firmware (`restat_base`)
+A low-level C firmware designed for Pico RP2040 microcontrollers to actuate, time, and persist relay outputs.
+* **Role**: Actuates 8 mechanical relay channels using high-precision timers and persists configurations directly to onboard Flash memory.
+* **Features**:
+  * Multi-interface Command Dispatcher (Serial, TCP/IP, BLE).
+  * Variable Execution Plan Parser: Processes complex execution strings concurrently to set states and schedules.
+  * Flash-Based Plan Persistence: Automatically stores execution plans at a `1.5 MB` flash offset (`0x180000`) and restores configurations upon reboot.
+  * Precise Timing Engine: Millisecond-level accuracy for Timed modes.
+  * Safety Watchdog & Sound Indicators: Recovery loops coupled with active buzzer signaling.
+
+#### 2. restatdesk GUI Application (`restatdesk`)
+A responsive, cross-platform C++ application built on **gtkmm 4** and **GTK 4**.
+* **Role**: Configures, controls, and monitors the relay station in real-time.
+* **Features**:
+  * Real-Time LED Indicators: High-visibility green status lights showing live channel states.
+  * Configurable Relay Modes:
+    * **Toggle Mode**: Activates or deactivates relays on click.
+    * **Timer Mode**: Executes timed sequences with flexible starting states (Active = ON on Start, Deactive = OFF on Start).
+  * Dynamic Plan Builder: Serializes only active relay states into a single, variable-length plan command to protect relay lifespans.
+  * Sleek Green-on-Black Dark Mode: Custom CSS styles compiled directly into the binary as GResource packages.
+  * Multithreaded System Logs: Visualized console output and persistent file logging.
+
+---
+
+### Command Interface (restat Protocol)
+
+All commands sent to the `restat_base` firmware must be wrapped in start/end markers: `<rs#TARGET#ACTION#PARAMS#end>`.
+
+| Command | Action | Description |
+|---|---|---|
+| `<rs#sys#id#end>` | Identify | Returns board identification (e.g. `<rs#sys#rs:333:2023:0#end>`) |
+| `<rs#sys#version#end>` | Get Version | Returns firmware version (e.g. `<rs#sys#restat v1.0.0#end>`) |
+| `<rs#ch#X#on#end>` | Channel ON | Sets channel `X` (1-8) to ON (active) state |
+| `<rs#ch#X#off#end>` | Channel OFF | Sets channel `X` (1-8) to OFF (deactive) state |
+| `<rs#ch#X#tmr#MS#end>` | Timed Channel | Starts timer on channel `X` for `MS` milliseconds starting ON |
+| `<rs#all#on#end>` | All ON | Turns all channels ON concurrently |
+| `<rs#all#off#end>` | All OFF | Turns all channels OFF concurrently |
+| `<rs#all#mask#MASK#end>` | Binary Mask | Sets all 8 channels to binary state `MASK` (e.g. `10101010`) |
+| `<rs#all#plan#[plan_string]#end>` | Execute Plan | Sends a variable-length configuration plan containing relay states and saves it to Flash |
+| `<rs#ch#X#stat#end>` | Channel Status | Returns the status string of channel `X` |
+| `<rs#all#stat#end>` | All Status | Returns status dump for all channels |
+| `<rs#sys#reset#end>` | Reset | Performs soft system reset using watchdog |
+
+---
 
 ### Installation
 
 ![Debian Linux OS](https://raw.githubusercontent.com/electux/restat/dev/docs/debtux.png)
 
-Navigate to release [page](https://github.com/electux/restat/releases) download and extract release archive.
+#### 1. Firmware (`restat_base`)
+1. Setup the Raspberry Pi Pico SDK on your host system.
+2. Navigate to the firmware workspace and build the project:
+   ```bash
+   cd sw/restat_base
+   mkdir -p build && cd build
+   cmake ..
+   make -j$(nproc)
+   ```
+3. Boot the RP2040 board in BOOTSEL mode by holding the boot button while connecting USB, and copy `restat_base.uf2` to the mounted mass storage device.
 
-To install **restat** follow next instructions
+#### 2. Desktop Application (`restatdesk`)
+Ensure all compiler tools and GTK 4 libraries are installed (see dependencies), then run:
+```bash
+cd sw/restatdesk/build
+make all
 ```
-in progress
-```
+The executable `restatdesk` will be compiled and ready to run inside the `build/` directory.
+
+---
 
 ### Usage
 
-Planned in picking and packaging in micro-factories.
+#### 1. GUI Panel
+Launch the compiled desktop client:
+```bash
+./sw/restatdesk/build/restatdesk
 ```
-in progress
+Configure your connection type (Serial Port path, TCP IP/Port, or Bluetooth address) inside the Settings window, toggle active relay options in the UI, and click **Execute Plan** in the main window or under the `Command` menu to apply changes.
+
+#### 2. Test Commands
+You can also connect to the station via raw serial console or socket connection (e.g., using `minicom` or `nc`) and issue raw protocol packages:
+```bash
+# Set channel 1 to ON
+<rs#ch#1#on#end>
 ```
+
+---
 
 ### Dependencies
 
-**restat** requires next modules and libraries
-```
-in progress
-```
+#### Firmware (`restat_base`)
+* Raspberry Pi Pico SDK (v1.5.0+)
+* GCC ARM Embedded Toolchain (`arm-none-eabi-gcc`)
+* CMake & GNU Make
 
-### Project structure
+#### Desktop GUI (`restatdesk`)
+* C++23 compatible compiler (GCC 13+)
+* `gtkmm-4.0` & `libgtk-4-dev`
+* `libserial-dev`
+* `pkg-config`
+* GNU Make
 
-**restat** is based on POP.
-```
-in progress
-```
+---
+
+### Project Structure
+
+The codebase is organized as follows:
+* [`sw/restat_base/`](file:///data/dev/raspberry/restat/github/restat/sw/restat_base) - Core Pico firmware:
+  - `src/command/` - Dispatcher and frame parser.
+  - `src/device/` - Watchdog, buzzer, relay, and flash persistence drivers.
+* [`sw/restat_base_tests/`](file:///data/dev/raspberry/restat/github/restat/sw/restat_base_tests) - C++ GoogleTest suite for host-based firmware logic validation.
+* [`sw/restatdesk/`](file:///data/dev/raspberry/restat/github/restat/sw/restatdesk) - GTK 4 client:
+  - `com/` - Serial, TCP, and BLE client layers.
+  - `config/` - File configuration load/store manager.
+  - `model/` - Relay delegates, channel states, and business logic.
+  - `view/` - GUI window tabs, widgets, and GResource styled assets.
+* [`sw/restatdesk_tests/`](file:///data/dev/raspberry/restat/github/restat/sw/restatdesk_tests) - C++ GoogleTest suite for desktop client controllers and helpers.
+* [`docs/`](file:///data/dev/raspberry/restat/github/restat/docs) - Documentation source files.
 
 ### Docs
 
@@ -71,8 +166,4 @@ Copyright (C) 2020 - 2024 by [electux.github.io/restat](https://electux.github.i
 
 Lets help and support Raspberry PI && GNOME.
 
-<a href="https://www.raspberrypi.org/donate/">
-<img src="https://raw.githubusercontent.com/electux/restat/master/docs/RPi.png" alt="RPi" width="350" height="98">
-</a> <a href="https://www.gnome.org/support-gnome/donate/">
-<img src="https://raw.githubusercontent.com/electux/restat/master/docs/GNOME.png" alt="GNOME" width="327" height="115">
-</a>
+<img src="https://raw.githubusercontent.com/electux/restat/master/docs/foundations.png" alt="Foundations">

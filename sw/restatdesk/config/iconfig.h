@@ -1,0 +1,91 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// iconfig.h
+/// Copyright (C) 2025 - 2026 Vladimir Roncevic <elektron.ronca@gmail.com>
+///
+/// restatdesk is free software: you can redistribute it and/or modify it
+/// under the terms of the GNU General Public License as published by the
+/// Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// restatdesk is distributed in the hope that it will be useful, but
+/// WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+/// See the GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License along
+/// with this program. If not, see <http://www.gnu.org/licenses/>.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma once
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @namespace Electux::App::Model
+/// @brief Namespace for application data model and entities
+namespace Electux::App::Model {
+    class IModel;
+} // namespace Electux::App::Model
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @namespace Electux::App::Config
+/// @brief Namespace for application configuration management
+namespace Electux::App::Config {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @class IConfig
+    /// @brief Interface for configuration mechanism.
+    ///
+    /// This interface defines the core operations for loading and storing
+    /// configuration data, allowing for different storage implementations
+    /// (e.g., file system, database, etc.).
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    class IConfig {
+      public:
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @name Local Type Aliases
+        /// @{
+        using Model = Electux::App::Model::IModel;
+        /// @}
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Virtual destructor for the IConfig interface.
+        /// Ensures proper destruction of derived class objects.
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        inline virtual ~IConfig() noexcept = default;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Initializes the configuration manager.
+        /// Performs file system checks, directory creation, and initial load.
+        /// Implementations should handle the specifics of the init mechanism,
+        /// such as file paths, database connections, etc.
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void init() = 0;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Loads configuration data from a source.
+        /// @return true if the configuration was successfully loaded, else
+        /// false. Implementations should handle the specifics of the loading
+        /// mechanism.
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual bool load() = 0;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Stores current configuration data to a destination.
+        /// @return true if the configuration was successfully stored, else
+        /// false. Implementations should handle the specifics of the storing
+        /// mechanism, such as file paths, database connections, etc.
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual bool store(bool verbose = false) = 0;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Sets the log configuration.
+        /// @param config Reference to the Model configuration object.
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void setConfig(const Model &config) = 0;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Gets the current log configuration.
+        /// @return A constant reference to the Model configuration.
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual const Model &getConfig() const = 0;
+    };
+} // namespace Electux::App::Config
